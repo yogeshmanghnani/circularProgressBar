@@ -12,7 +12,9 @@ import UIKit
 class CircularProgressBar: UIView {
     
     
-    var lineWidth:CGFloat = 50
+    public var lineWidth:CGFloat = 50
+    
+    private let foregroundLayer = CAShapeLayer()
     
     private var radius: CGFloat {
         get{
@@ -29,44 +31,16 @@ class CircularProgressBar: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        makeBar(percentage: 50)
+        makeBar()
     }
     
     
     
-    public func makeBar(percentage: Double){
+    private func makeBar(){
         self.layer.sublayers = nil
         drawBackgroundLayer()
-        drawForegroundLayer(percentage: percentage)
+        drawForegroundLayer()
     }
-    
-    private func drawForegroundLayer(percentage: Double){
-        
-        let startAngle = (-CGFloat.pi/2)
-        let endAngle = 2 * CGFloat.pi * CGFloat(percentage / 100) + startAngle
-        
-        let layer = CAShapeLayer()
-        let path = UIBezierPath(arcCenter: pathCenter, radius: self.radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-        
-        layer.lineCap = kCALineCapRound
-        layer.path = path.cgPath
-        layer.lineWidth = lineWidth
-        layer.fillColor = UIColor.clear.cgColor
-        layer.strokeColor = UIColor.red.cgColor
-        
-        let animation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.fromValue = 0
-        animation.toValue = 1
-        animation.duration = 2
-        layer.add(animation, forKey: "foregroundAnimation")
-        
-        
-        self.layer.addSublayer(layer)
-        
-    }
-    
-    
-    
     
     private func drawBackgroundLayer(){
         let layer = CAShapeLayer()
@@ -78,6 +52,48 @@ class CircularProgressBar: UIView {
         self.layer.addSublayer(layer)
         
     }
+    
+    private func drawForegroundLayer(){
+        
+        let startAngle = (-CGFloat.pi/2)
+        let endAngle = 2 * CGFloat.pi + startAngle
+        
+        let path = UIBezierPath(arcCenter: pathCenter, radius: self.radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        
+        foregroundLayer.lineCap = kCALineCapRound
+        foregroundLayer.path = path.cgPath
+        foregroundLayer.lineWidth = lineWidth
+        foregroundLayer.fillColor = UIColor.clear.cgColor
+        foregroundLayer.strokeColor = UIColor.red.cgColor
+        foregroundLayer.strokeEnd = 0
+        
+        self.layer.addSublayer(foregroundLayer)
+        
+    }
+    
+    
+    public func setProgress(to progressConstant: Double, withAnimation: Bool) {
+        
+        var progress: Double {
+            get {
+                if progressConstant > 1 { return 1 }
+                else if progressConstant < 0 { return 0 }
+                else { return progressConstant }
+            }
+        }
+        
+        foregroundLayer.strokeEnd = CGFloat(progress)
+        
+        if withAnimation {
+            let animation = CABasicAnimation(keyPath: "strokeEnd")
+            animation.fromValue = 0
+            animation.toValue = progress
+            animation.duration = 2
+            foregroundLayer.add(animation, forKey: "foregroundAnimation")
+        }
+        
+    }
+    
 
-
+    
 }

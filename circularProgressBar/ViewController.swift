@@ -9,16 +9,22 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    //MARK: IBOutlets
     @IBOutlet weak var progressBar: CircularProgressBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @objc func handleTap() {
+        progressBar.setProgress(to: 1, withAnimation: true)
     }
 
 
