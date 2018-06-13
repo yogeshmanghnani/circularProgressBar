@@ -13,6 +13,7 @@
 		ECB6B6E720CF8436004969F8 /* circularProgressBar.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ECB6B6E520CF8436004969F8 /* circularProgressBar.xcdatamodeld */; };
 		ECB6B6E920CF8438004969F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ECB6B6E820CF8438004969F8 /* Assets.xcassets */; };
 		ECB6B6EC20CF8438004969F8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ECB6B6EA20CF8438004969F8 /* LaunchScreen.storyboard */; };
+		ECB6B6F420CF8450004969F8 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB6B6F320CF8450004969F8 /* CircularProgressBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		ECB6B6E820CF8438004969F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		ECB6B6EB20CF8438004969F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ECB6B6ED20CF8438004969F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ECB6B6F320CF8450004969F8 /* CircularProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				ECB6B6DE20CF8436004969F8 /* AppDelegate.swift */,
+				ECB6B6F320CF8450004969F8 /* CircularProgressBar.swift */,
 				ECB6B6E020CF8436004969F8 /* ViewController.swift */,
 				ECB6B6E220CF8436004969F8 /* Main.storyboard */,
 				ECB6B6E820CF8438004969F8 /* Assets.xcassets */,
@@ -141,6 +144,7 @@
 				ECB6B6E120CF8436004969F8 /* ViewController.swift in Sources */,
 				ECB6B6DF20CF8436004969F8 /* AppDelegate.swift in Sources */,
 				ECB6B6E720CF8436004969F8 /* circularProgressBar.xcdatamodeld in Sources */,
+				ECB6B6F420CF8450004969F8 /* CircularProgressBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
