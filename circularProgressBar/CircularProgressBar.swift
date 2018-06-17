@@ -11,7 +11,7 @@ import UIKit
 
 class CircularProgressBar: UIView {
     
-    
+    private var label = UILabel()
     public var lineWidth:CGFloat = 50
     
     private let foregroundLayer = CAShapeLayer()
@@ -21,6 +21,8 @@ class CircularProgressBar: UIView {
             return 100
         }
     }
+    
+    public var safePercent: Int = 100
     
     
     private var pathCenter: CGPoint{
@@ -32,6 +34,8 @@ class CircularProgressBar: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         makeBar()
+        label = makeLabel(withText: "0")
+        self.addSubview(label)
     }
     
     
@@ -90,8 +94,42 @@ class CircularProgressBar: UIView {
             animation.toValue = progress
             animation.duration = 2
             foregroundLayer.add(animation, forKey: "foregroundAnimation")
+            
         }
         
+        var currentTime:Double = 0
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (timer) in
+            if currentTime >= 2{
+                timer.invalidate()
+            } else {
+                currentTime += 0.05
+                let percent = currentTime/2 * 100
+                if Int(percent * progress) >= self.safePercent {
+                    self.foregroundLayer.strokeColor = UIColor.green.cgColor
+                } else {
+                    self.foregroundLayer.strokeColor = UIColor.red.cgColor
+                }
+                self.label.text = "\(Int(progress * percent))"
+                self.configLabel()
+            }
+        }
+        timer.fire()
+        
+    }
+    
+    
+    private func makeLabel(withText text: String) -> UILabel {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        label.text = text
+        label.font = UIFont.systemFont(ofSize: 42)
+        label.sizeToFit()
+        label.center = pathCenter
+        return label
+    }
+    
+    private func configLabel(){
+        label.sizeToFit()
+        label.center = pathCenter
     }
     
 
