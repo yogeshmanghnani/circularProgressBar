@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,15 +23,15 @@
                                 <rect key="frame" x="16" y="162" width="343" height="343"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="343" id="BD0-Oo-G58"/>
-                                    <constraint firstAttribute="height" constant="343" id="ca3-Vm-Ahp"/>
+                                    <constraint firstAttribute="width" secondItem="j2b-GS-53q" secondAttribute="height" multiplier="1:1" id="QDT-7b-1jR"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="j2b-GS-53q" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="8gv-iQ-GBB"/>
-                            <constraint firstItem="j2b-GS-53q" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="JYz-oW-Jz1"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="j2b-GS-53q" secondAttribute="trailing" constant="16" id="XMG-CT-LFv"/>
+                            <constraint firstItem="j2b-GS-53q" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="r8E-IJ-jn3"/>
+                            <constraint firstItem="j2b-GS-53q" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="yVD-UO-tOe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

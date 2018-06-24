@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     }
     
     @objc func handleTap() {
+        progressBar.labelSize = 60
         progressBar.safePercent = 100
         progressBar.setProgress(to: 1, withAnimation: true)
         

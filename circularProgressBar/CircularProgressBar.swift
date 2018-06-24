@@ -11,70 +11,37 @@ import UIKit
 
 class CircularProgressBar: UIView {
     
-    private var label = UILabel()
-    public var lineWidth:CGFloat = 50
-    
-    private let foregroundLayer = CAShapeLayer()
-    
-    private var radius: CGFloat {
-        get{
-            return 100
-        }
-    }
-    
-    public var safePercent: Int = 100
-    
-    
-    private var pathCenter: CGPoint{
-        get{
-            return self.convert(self.center, from:self.superview)
-        }
-    }
+    //MARK: awakeFromNib
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        makeBar()
-        label = makeLabel(withText: "0")
-        self.addSubview(label)
+        setupView()
+        label.text = "0"
     }
     
     
+    //MARK: Public
     
-    private func makeBar(){
-        self.layer.sublayers = nil
-        drawBackgroundLayer()
-        drawForegroundLayer()
+    public var lineWidth:CGFloat = 50 {
+        didSet{
+            foregroundLayer.lineWidth = lineWidth
+            backgroundLayer.lineWidth = lineWidth - (0.20 * lineWidth)
+        }
     }
     
-    private func drawBackgroundLayer(){
-        let layer = CAShapeLayer()
-        let path = UIBezierPath(arcCenter: pathCenter, radius: self.radius, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
-        layer.path = path.cgPath
-        layer.strokeColor = UIColor.lightGray.cgColor
-        layer.lineWidth = lineWidth - (lineWidth * 20/100)
-        layer.fillColor = UIColor.clear.cgColor
-        self.layer.addSublayer(layer)
-        
+    public var labelSize: CGFloat = 20 {
+        didSet {
+            label.font = UIFont.systemFont(ofSize: labelSize)
+            label.sizeToFit()
+            configLabel()
+        }
     }
     
-    private func drawForegroundLayer(){
-        
-        let startAngle = (-CGFloat.pi/2)
-        let endAngle = 2 * CGFloat.pi + startAngle
-        
-        let path = UIBezierPath(arcCenter: pathCenter, radius: self.radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
-        
-        foregroundLayer.lineCap = kCALineCapRound
-        foregroundLayer.path = path.cgPath
-        foregroundLayer.lineWidth = lineWidth
-        foregroundLayer.fillColor = UIColor.clear.cgColor
-        foregroundLayer.strokeColor = UIColor.red.cgColor
-        foregroundLayer.strokeEnd = 0
-        
-        self.layer.addSublayer(foregroundLayer)
-        
+    public var safePercent: Int = 100 {
+        didSet{
+            setForegroundLayerColorForSafePercent()
+        }
     }
-    
     
     public func setProgress(to progressConstant: Double, withAnimation: Bool) {
         
@@ -104,12 +71,8 @@ class CircularProgressBar: UIView {
             } else {
                 currentTime += 0.05
                 let percent = currentTime/2 * 100
-                if Int(percent * progress) >= self.safePercent {
-                    self.foregroundLayer.strokeColor = UIColor.green.cgColor
-                } else {
-                    self.foregroundLayer.strokeColor = UIColor.red.cgColor
-                }
                 self.label.text = "\(Int(progress * percent))"
+                self.setForegroundLayerColorForSafePercent()
                 self.configLabel()
             }
         }
@@ -118,10 +81,58 @@ class CircularProgressBar: UIView {
     }
     
     
+    
+    
+    //MARK: Private
+    private var label = UILabel()
+    private let foregroundLayer = CAShapeLayer()
+    private let backgroundLayer = CAShapeLayer()
+    private var radius: CGFloat {
+        get{
+            if self.frame.width < self.frame.height { return (self.frame.width - lineWidth)/2 }
+            else { return (self.frame.height - lineWidth)/2 }
+        }
+    }
+    
+    private var pathCenter: CGPoint{ get{ return self.convert(self.center, from:self.superview) } }
+    private func makeBar(){
+        self.layer.sublayers = nil
+        drawBackgroundLayer()
+        drawForegroundLayer()
+    }
+    
+    private func drawBackgroundLayer(){
+        let path = UIBezierPath(arcCenter: pathCenter, radius: self.radius, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
+        self.backgroundLayer.path = path.cgPath
+        self.backgroundLayer.strokeColor = UIColor.lightGray.cgColor
+        self.backgroundLayer.lineWidth = lineWidth - (lineWidth * 20/100)
+        self.backgroundLayer.fillColor = UIColor.clear.cgColor
+        self.layer.addSublayer(backgroundLayer)
+        
+    }
+    
+    private func drawForegroundLayer(){
+        
+        let startAngle = (-CGFloat.pi/2)
+        let endAngle = 2 * CGFloat.pi + startAngle
+        
+        let path = UIBezierPath(arcCenter: pathCenter, radius: self.radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        
+        foregroundLayer.lineCap = kCALineCapRound
+        foregroundLayer.path = path.cgPath
+        foregroundLayer.lineWidth = lineWidth
+        foregroundLayer.fillColor = UIColor.clear.cgColor
+        foregroundLayer.strokeColor = UIColor.red.cgColor
+        foregroundLayer.strokeEnd = 0
+        
+        self.layer.addSublayer(foregroundLayer)
+        
+    }
+    
     private func makeLabel(withText text: String) -> UILabel {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
         label.text = text
-        label.font = UIFont.systemFont(ofSize: 42)
+        label.font = UIFont.systemFont(ofSize: labelSize)
         label.sizeToFit()
         label.center = pathCenter
         return label
@@ -132,6 +143,31 @@ class CircularProgressBar: UIView {
         label.center = pathCenter
     }
     
+    private func setForegroundLayerColorForSafePercent(){
+        if Int(label.text!)! >= self.safePercent {
+            self.foregroundLayer.strokeColor = UIColor.green.cgColor
+        } else {
+            self.foregroundLayer.strokeColor = UIColor.red.cgColor
+        }
+    }
+    
+    private func setupView() {
+        makeBar()
+        self.addSubview(label)
+    }
+    
+    
+    
+    //Layout Sublayers
 
+    private var layoutDone = false
+    override func layoutSublayers(of layer: CALayer) {
+        if !layoutDone {
+            let tempText = label.text
+            setupView()
+            label.text = tempText
+            layoutDone = true
+        }
+    }
     
 }
