@@ -43,6 +43,13 @@ class CircularProgressBar: UIView {
         }
     }
     
+    public var wholeCircleAnimationDuration: Double = 2
+    
+    public var lineBackgroundColor: UIColor = .gray
+    public var lineColor: UIColor = .red
+    public var lineFinishColor: UIColor = .green
+    
+    
     public func setProgress(to progressConstant: Double, withAnimation: Bool) {
         
         var progress: Double {
@@ -53,20 +60,22 @@ class CircularProgressBar: UIView {
             }
         }
         
+        let animationDuration = wholeCircleAnimationDuration * progress
+        
         foregroundLayer.strokeEnd = CGFloat(progress)
         
         if withAnimation {
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.fromValue = 0
             animation.toValue = progress
-            animation.duration = 2
+            animation.duration = animationDuration
             foregroundLayer.add(animation, forKey: "foregroundAnimation")
             
         }
         
         var currentTime:Double = 0
         let timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (timer) in
-            if currentTime >= 2{
+            if currentTime >= animationDuration {
                 timer.invalidate()
             } else {
                 currentTime += 0.05
@@ -94,7 +103,10 @@ class CircularProgressBar: UIView {
         }
     }
     
-    private var pathCenter: CGPoint{ get{ return self.convert(self.center, from:self.superview) } }
+    private var pathCenter: CGPoint{
+        get{ return self.convert(self.center, from:self.superview) }
+    }
+    
     private func makeBar(){
         self.layer.sublayers = nil
         drawBackgroundLayer()
@@ -104,7 +116,7 @@ class CircularProgressBar: UIView {
     private func drawBackgroundLayer(){
         let path = UIBezierPath(arcCenter: pathCenter, radius: self.radius, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
         self.backgroundLayer.path = path.cgPath
-        self.backgroundLayer.strokeColor = UIColor.lightGray.cgColor
+        self.backgroundLayer.strokeColor = lineBackgroundColor.cgColor
         self.backgroundLayer.lineWidth = lineWidth - (lineWidth * 20/100)
         self.backgroundLayer.fillColor = UIColor.clear.cgColor
         self.layer.addSublayer(backgroundLayer)
@@ -122,7 +134,7 @@ class CircularProgressBar: UIView {
         foregroundLayer.path = path.cgPath
         foregroundLayer.lineWidth = lineWidth
         foregroundLayer.fillColor = UIColor.clear.cgColor
-        foregroundLayer.strokeColor = UIColor.red.cgColor
+        foregroundLayer.strokeColor = lineColor.cgColor
         foregroundLayer.strokeEnd = 0
         
         self.layer.addSublayer(foregroundLayer)
@@ -145,9 +157,9 @@ class CircularProgressBar: UIView {
     
     private func setForegroundLayerColorForSafePercent(){
         if Int(label.text!)! >= self.safePercent {
-            self.foregroundLayer.strokeColor = UIColor.green.cgColor
+            self.foregroundLayer.strokeColor = lineFinishColor.cgColor
         } else {
-            self.foregroundLayer.strokeColor = UIColor.red.cgColor
+            self.foregroundLayer.strokeColor = lineColor.cgColor
         }
     }
     
