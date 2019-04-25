@@ -11,10 +11,15 @@ import UIKit
 
 class CircularProgressBar: UIView {
     
-    //MARK: awakeFromNib
+    //Mark: Setup
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+        label.text = "0"
+    }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         setupView()
         label.text = "0"
     }
