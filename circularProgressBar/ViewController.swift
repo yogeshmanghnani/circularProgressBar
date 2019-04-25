@@ -28,8 +28,10 @@ class ViewController: UIViewController {
         progressBar.safePercent = 100
         progressBar.setProgress(to: 1, withAnimation: true)
         
-        
     }
+
+
+
 
 
 }
