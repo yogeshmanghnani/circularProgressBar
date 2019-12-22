@@ -16,6 +16,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+        
+        progressBar.safePercent = 100
+        progressBar.lineColor = .blue
+        progressBar.lineFinishColor = .red
+        progressBar.lineBackgroundColor = .gray
     }
 
     override func didReceiveMemoryWarning() {
@@ -24,11 +29,7 @@ class ViewController: UIViewController {
     }
     
     @objc func handleTap() {
-        progressBar.labelSize = 60
-        progressBar.safePercent = 100
         progressBar.setProgress(to: 1, withAnimation: true)
-        
-        
     }
 
 
